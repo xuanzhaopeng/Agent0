@@ -8,6 +8,8 @@ N_SANDBOXES=3 # n - 1 desired sandboxes
 echo "Starting SandboxFusion servers..."
 
 cd $SANDBOX_DIR
+conda activate sandbox
+poetry install
 
 for i in $(seq 0 $N_SANDBOXES); do
     PORT=${PORTS[$i]}
