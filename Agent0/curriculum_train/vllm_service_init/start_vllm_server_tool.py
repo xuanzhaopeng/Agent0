@@ -321,11 +321,14 @@ def hello():
     
     with open(name, 'r') as f:
         data = json.load(f)
+        print(f'[server] Loaded {len(data)} questions from {name}.')
     os.remove(name)
 
     questions = [item.get('question', '') for item in data]
     answers   = [item.get('answer',   '') for item in data]
 
+    print(f'[server] Received questions: {questions}')
+    
     results_all = []
     
     # Using TQDM for clean progress visualization
