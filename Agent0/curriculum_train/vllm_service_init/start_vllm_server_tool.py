@@ -222,7 +222,7 @@ def generate_with_tool_use(question: str, num_candidates: int = 10, max_turns: i
         results_map = {}
         for future, idx in tasks_to_run:
             try:
-                results_map[idx] = future.result()
+                results_map[idx] = future.result(timeout=25) # add timeout to avoid hanging
             except Exception as e:
                 results_map[idx] = f"Sandbox Error: {e}"
 
