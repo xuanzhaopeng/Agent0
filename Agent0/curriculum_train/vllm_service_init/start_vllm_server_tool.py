@@ -333,8 +333,6 @@ def hello():
 
     questions = [item.get('question', '') for item in data]
     answers   = [item.get('answer',   '') for item in data]
-
-    print(f'[server] Received questions: {questions}')
     
     results_all = []
     
