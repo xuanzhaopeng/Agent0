@@ -16,6 +16,7 @@ Setup Instructions:
 '''
 
 # Disable vLLM v1 and set attention backend instead of using CUDA graph
+import os
 os.environ['VLLM_USE_V1'] = '0'
 os.environ['VLLM_ATTENTION_BACKEND'] = 'XFORMERS' 
 
@@ -23,7 +24,6 @@ from flask import Flask, request, jsonify
 import vllm
 import argparse
 import json
-import os
 import threading
 import time
 import torch
