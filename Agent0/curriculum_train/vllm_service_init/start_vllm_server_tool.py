@@ -72,6 +72,7 @@ def execute_code_in_sandbox(code: str) -> str:
     except Exception as e:
         return f"Execution Error: {e}"
 
+os.environ['VLLM_USE_V1'] = '0'
 
 # ---------------------------- Initial Setup --------------------------------- #
 
@@ -81,6 +82,8 @@ parser.add_argument('--model_path', type=str, default='Qwen/Qwen3-4B-Base')
 parser.add_argument('--gpu_mem_util', type=float, default=0.8,
                     help='The maximum GPU memory utilization fraction for vLLM.')
 parser.add_argument('--max_model_len', type=int, default=2048, help='The maximum context length for the model.')
+parser.add_argument('--enforce_eager', action='store_true', 
+                    help='Disable CUDA graph to prevent memory access errors.')
 args = parser.parse_args()
 
 
@@ -90,7 +93,8 @@ model = vllm.LLM(
     model=args.model_path,
     tokenizer=args.model_path,
     gpu_memory_utilization=args.gpu_mem_util,
-    max_model_len=args.max_model_len
+    max_model_len=args.max_model_len,
+    enforce_eager=args.enforce_eager
 )
 
 sampling_params_single_turn = vllm.SamplingParams(
