@@ -84,7 +84,7 @@ parser.add_argument('--max_model_len', type=int, default=2048, help='The maximum
 args = parser.parse_args()
 
 
-print('[init] Loading model...')
+print(f'[init] Loading model with {args.gpu_mem_util} GPU memory utilization...')
 tokenizer = AutoTokenizer.from_pretrained(args.model_path)
 model = vllm.LLM(
     model=args.model_path,
