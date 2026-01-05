@@ -1,7 +1,7 @@
 #!/bin/bash
 # Start 4 SandboxFusion servers on different ports
 
-SANDBOX_DIR="$HOME/Agent0/Agent0/SandboxFusion"
+SANDBOX_DIR="/workspace/SandboxFusion"
 PORTS=(8080 8081 8082 8083)
 N_SANDBOXES=3 # n - 1 desired sandboxes
 
