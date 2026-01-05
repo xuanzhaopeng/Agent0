@@ -15,6 +15,10 @@ Setup Instructions:
     python your_server_file_name.py --port 5000 --model_path Qwen/Qwen3-4B-Base
 '''
 
+# Disable vLLM v1 and set attention backend instead of using CUDA graph
+os.environ['VLLM_USE_V1'] = '0'
+os.environ['VLLM_ATTENTION_BACKEND'] = 'XFORMERS' 
+
 from flask import Flask, request, jsonify
 import vllm
 import argparse
@@ -71,8 +75,6 @@ def execute_code_in_sandbox(code: str) -> str:
             return f"API Error: {result}"
     except Exception as e:
         return f"Execution Error: {e}"
-
-os.environ['VLLM_USE_V1'] = '0'
 
 # ---------------------------- Initial Setup --------------------------------- #
 
@@ -326,7 +328,8 @@ def hello():
     with open(name, 'r') as f:
         data = json.load(f)
         print(f'[server] Loaded {len(data)} questions from {name}.')
-    os.remove(name)
+    # for debug prupose, we don't remove the file
+    # os.remove(name)
 
     questions = [item.get('question', '') for item in data]
     answers   = [item.get('answer',   '') for item in data]
