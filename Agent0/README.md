@@ -26,7 +26,13 @@ Empirically, Agent 0 substantially boosts reasoning capabilities on the Qwen3-8B
 ### 1. Configure Environment and Prepare Dirs
 
 ```bash
-git clone https://github.com/aiming-lab/Agent0.git
+# Download models to /workspace which is Persistent volume in Runpod
+huggingface-cli login
+huggingface-cli download Qwen/Qwen3-0.6B-Base --local-dir /workspace/models/Qwen/Qwen3-0.6B-Base --local-dir-use-symlinks False
+```
+
+```bash
+git clone https://github.com/xuanzhaopeng/Agent0.git
 
 cd Agent0/Agent0
 
@@ -36,6 +42,7 @@ conda activate curriculum
 cd curriculum_train/
 pip install -r requirements.txt
 pip install flash-attn==2.7.4.post1 --no-build-isolation --no-cache-dir
+pip install stopit flask vllm transformers torch requests # for vllm_service
 
 # For executor training
 conda deactivate
@@ -55,7 +62,7 @@ You need to deploy a code sandbox service for subsequent code compilation. You c
 Here is a sample script for the sandbox setup. We deployed four sandbox services. Each service is assigned an IP address and a corresponding port.
 
 ```bash
-git clone https://github.com/bytedance/SandboxFusion.git
+git clone https://github.com/xuanzhaopeng/SandboxFusion.git
 
 cd SandboxFusion
 poetry install

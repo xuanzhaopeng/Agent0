@@ -80,7 +80,11 @@ def split_list(lst, n=4):
 os.environ["NO_PROXY"] = "0.0.0.0,127.0.0.1"
 
 def fetch(index,i):
-    response = requests.get(f"http://0.0.0.0:{5000+index}/hello?name={i}")
+    MULTIPLE_VLLM_SERVICE = os.getenv("MULTIPLE_VLLM_SERVICE","0")
+    if MULTIPLE_VLLM_SERVICE!="1":
+        response = requests.get(f"http://0.0.0.0:5000/hello?name={i}")
+    else:
+        response = requests.get(f"http://0.0.0.0:{5000+index}/hello?name={i}")
     return True
 
 def generate_results(data):
