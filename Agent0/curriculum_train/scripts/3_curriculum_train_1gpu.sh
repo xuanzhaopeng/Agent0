@@ -2,38 +2,35 @@
 
 project_name=agent0
 
-executor_agent_path=$1
-curriculum_agent_path=$2
-save_path=$3
+curriculum_agent_path=$1
+save_path=$2
 echo "save_path: $save_path"
-RUN_ID=$(date +%s%N)
-export RUN_ID
-
-echo "RUN_ID=$RUN_ID"
-
-# vLLM server
-bash vllm_service_init/start.sh $executor_agent_path $RUN_ID
-echo "vLLM services started with RUN_ID=$RUN_ID"
 
 echo "Start training curriculum: $curriculum_agent_path -> $save_path"
 
-CUDA_VISIBLE_DEVICES=0,1,2,3 python3 -m verl.trainer.main \
+# Set environment variable to indicate single vLLM service usage
+export MULTIPLE_VLLM_SERVICE=0
+
+CUDA_VISIBLE_DEVICES=0 python3 -m verl.trainer.main \
     config=examples/config.yaml \
-    data.max_response_length=4096 \
+    data.max_response_length=2048 \
     worker.actor.model.model_path=$curriculum_agent_path \
     trainer.experiment_name=$save_path \
     trainer.save_checkpoint_path=${STORAGE_PATH}/models/$save_path \
     trainer.total_epochs=1000 \
     worker.reward.reward_function=./examples/reward_function/curriculum_reward.py:compute_score \
     trainer.val_freq=-1 \
-    trainer.n_gpus_per_node=4 \
+    trainer.n_gpus_per_node=1 \
     data.format_prompt=./examples/format_prompt/questioner.jinja \
     worker.rollout.n=4 \
-    worker.actor.global_batch_size=128 \
+    worker.actor.global_batch_size=64 \
     trainer.logger=['console','wandb'] \
     trainer.project_name=$project_name \
     trainer.max_steps=6 \
-    trainer.save_freq=1
+    trainer.save_freq=1 \
+    worker.rollout.gpu_memory_utilization=0.5 \
+    worker.rollout.tensor_parallel_size=1
+
 
 sleep 5
 

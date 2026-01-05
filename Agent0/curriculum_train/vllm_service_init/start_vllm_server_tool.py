@@ -34,10 +34,10 @@ from tqdm import tqdm
 # ---------------------------- Code Execution Tool --------------------------- #
 
 SANDBOX_API_URLS = [
-    'IP1:PORT1/run_code',
-    'IP2:PORT2/run_code',
-    'IP3:PORT3/run_code',
-    'IP4:PORT4/run_code'
+    '0.0.0.0:5000/run_code',
+    '0.0.0.0:5001/run_code',
+    '0.0.0.0:5002/run_code',
+    '0.0.0.0:5003/run_code'
 ]
 
 api_counter_lock = threading.Lock()
@@ -80,6 +80,7 @@ parser.add_argument('--port', type=str, default='5000')
 parser.add_argument('--model_path', type=str, default='Qwen/Qwen3-4B-Base')
 parser.add_argument('--gpu_mem_util', type=float, default=0.8,
                     help='The maximum GPU memory utilization fraction for vLLM.')
+parser.add_argument('--max_model_len', type=int, default=2048, help='The maximum context length for the model.')
 args = parser.parse_args()
 
 
@@ -89,6 +90,7 @@ model = vllm.LLM(
     model=args.model_path,
     tokenizer=args.model_path,
     gpu_memory_utilization=args.gpu_mem_util,
+    max_model_len=args.max_model_len
 )
 
 sampling_params_single_turn = vllm.SamplingParams(
