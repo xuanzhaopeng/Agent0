@@ -34,10 +34,10 @@ from tqdm import tqdm
 # ---------------------------- Code Execution Tool --------------------------- #
 
 SANDBOX_API_URLS = [
-    '0.0.0.0:5000/run_code',
-    '0.0.0.0:5001/run_code',
-    '0.0.0.0:5002/run_code',
-    '0.0.0.0:5003/run_code'
+    '0.0.0.0:8080/run_code',
+    '0.0.0.0:8082/run_code',
+    '0.0.0.0:8083/run_code',
+    '0.0.0.0:8084/run_code'
 ]
 
 api_counter_lock = threading.Lock()

@@ -2,7 +2,7 @@
 # Start 4 SandboxFusion servers on different ports
 
 SANDBOX_DIR="/workspace/SandboxFusion"
-PORTS=(8080 8081 8082 8083)
+PORTS=(8080 8082 8083 8084)
 N_SANDBOXES=3 # n - 1 desired sandboxes
 
 echo "Starting SandboxFusion servers..."
