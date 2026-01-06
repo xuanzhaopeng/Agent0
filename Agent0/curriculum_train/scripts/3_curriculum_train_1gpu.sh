@@ -11,7 +11,7 @@ echo "Start training curriculum: $curriculum_agent_path -> $save_path"
 # Set environment variable to indicate single vLLM service usage
 export MULTIPLE_VLLM_SERVICE=0
 
-CUDA_VISIBLE_DEVICES=0 python3 -m verl.trainer.main \
+CUDA_VISIBLE_DEVICES=0,1 python3 -m verl.trainer.main \
     config=examples/config.yaml \
     data.max_response_length=1024 \
     data.max_prompt_length=1024 \
