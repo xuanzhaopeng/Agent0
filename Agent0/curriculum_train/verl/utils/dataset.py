@@ -132,7 +132,10 @@ class RLHFDataset(Dataset):
             self.personas = [item['input persona'] for item in personas_dataset]
             # self.personas = self.personas.select(range(100))
         if self.filter_overlong_prompts:
+            print("[Verl] Filtering overlong prompts...")
+            print(f" - Original dataset size: {len(self.dataset)}")
             self.dataset = self.dataset.filter(self._filter_overlong_prompts, desc="Filtering overlong prompts")
+            print(f" - Filtered dataset size: {len(self.dataset)}")
 
     def _build_messages(self, example: Dict[str, Any]) -> List[Dict[str, Any]]:
         prompt_str: str = example[self.prompt_key]
