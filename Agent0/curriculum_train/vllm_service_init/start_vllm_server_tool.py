@@ -341,7 +341,7 @@ def hello():
     
     for q, a in progress_bar:
         try:
-            if q and a:
+            if q and a and len(q.strip()) > 0:
                 # Multi-turn generation
                 final_assistant_messages = generate_with_tool_use(q, num_candidates=2, max_turns=4)
                 
