@@ -21,17 +21,21 @@ CUDA_VISIBLE_DEVICES=0 python3 -m verl.trainer.main \
     trainer.total_epochs=1000 \
     worker.reward.reward_function=./examples/reward_function/curriculum_reward.py:compute_score \
     trainer.val_freq=-1 \
+    trainer.val_before_train=false \
     trainer.n_gpus_per_node=1 \
     data.format_prompt=./examples/format_prompt/questioner.jinja \
     worker.rollout.n=4 \
     data.rollout_batch_size=16 \
+    data.val_batch_size=1 \
     worker.actor.global_batch_size=16 \
     trainer.logger=['console'] \
     trainer.project_name=$project_name \
     trainer.max_steps=6 \
     trainer.save_freq=1 \
     worker.rollout.gpu_memory_utilization=0.5 \
-    worker.rollout.tensor_parallel_size=1
+    worker.rollout.tensor_parallel_size=1 \
+    worker.actor.fsdp.enable_cpu_offload=false \
+    worker.ref.fsdp.enable_cpu_offload=false
 
 
 sleep 5
