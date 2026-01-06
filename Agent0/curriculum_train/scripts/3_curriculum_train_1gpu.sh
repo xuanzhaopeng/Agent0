@@ -13,7 +13,8 @@ export MULTIPLE_VLLM_SERVICE=0
 
 CUDA_VISIBLE_DEVICES=0 python3 -m verl.trainer.main \
     config=examples/config.yaml \
-    data.max_response_length=2048 \
+    data.max_response_length=1024 \
+    data.max_prompt_length=1024 \
     worker.actor.model.model_path=$curriculum_agent_path \
     trainer.experiment_name=$save_path \
     trainer.save_checkpoint_path=${STORAGE_PATH}/models/$save_path \
