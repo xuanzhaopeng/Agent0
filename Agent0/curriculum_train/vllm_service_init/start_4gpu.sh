@@ -1,3 +1,5 @@
+#!/bin/bash
+
 model_path=$1
 run_id=$2
 export VLLM_DISABLE_COMPILE_CACHE=1
