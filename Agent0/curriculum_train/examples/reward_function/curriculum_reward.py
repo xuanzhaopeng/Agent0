@@ -77,7 +77,7 @@ def generate_temp_filename(prefix="temp", suffix=".json"):
     return f"{STORAGE_PATH}/temp_results/{prefix}_{timestamp}_{rand_part}{suffix}"
 def split_list(lst, n=4):
     if n == 1:
-        return lst
+        return [lst]
     k, m = divmod(len(lst), n)
     return [lst[i*k + min(i, m):(i+1)*k + min(i+1, m)] for i in range(n)]
 
@@ -156,6 +156,7 @@ def compute_score(predicts: List[str], ground_truths: List[str], format_weight: 
         else:
             results.append({"question": "", "answer": ""})
 
+    print(f" - {len(results)} results parsed.")
     final_results = generate_results(results)
     penalty = cluster_share_per_problem([result['question'] for result in final_results], distance_threshold=0.5)
     assert len(penalty) == len(final_results)
