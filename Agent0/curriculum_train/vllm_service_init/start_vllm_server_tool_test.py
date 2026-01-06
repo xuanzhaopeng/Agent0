@@ -1,6 +1,6 @@
 import requests
 
-def call_hello(name='abc.json', host='127.0.0.1', port=5000, timeout=60):
+def call_hello(name='abc.json', host='0.0.0.0', port=5000, timeout=60):
     url = f'http://{host}:{port}/hello'
     try:
         resp = requests.get(url, params={'name': name}, timeout=timeout)

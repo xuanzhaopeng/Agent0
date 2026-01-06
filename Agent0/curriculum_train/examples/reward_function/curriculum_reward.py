@@ -104,8 +104,9 @@ def generate_results(data):
     for i in tqdm(range(4), desc="  - Reading result files", leave=False):
         with open(random_names[i].replace('.json','_results.json'),'r') as f:
             final_results.extend(json.load(f))
-    for i in range(4):
-        os.remove(random_names[i].replace('.json','_results.json'))
+    # Do not delete temp files for debugging
+    #for i in range(4):
+    #    os.remove(random_names[i].replace('.json','_results.json'))
     return final_results
 
 def format_reward(predict: str) -> float:
