@@ -18,7 +18,7 @@ Setup Instructions:
 # Disable vLLM v1 and set attention backend instead of using CUDA graph
 import os
 os.environ['VLLM_USE_V1'] = '0'
-#os.environ['VLLM_ATTENTION_BACKEND'] = 'XFORMERS' 
+os.environ['VLLM_ATTENTION_BACKEND'] = 'XFORMERS' 
 
 from flask import Flask, request, jsonify
 import vllm
@@ -96,7 +96,8 @@ model = vllm.LLM(
     tokenizer=args.model_path,
     gpu_memory_utilization=args.gpu_mem_util,
     max_model_len=args.max_model_len,
-    enforce_eager=args.enforce_eager
+    enforce_eager=args.enforce_eager,
+    trust_remote_code=True
 )
 
 sampling_params_single_turn = vllm.SamplingParams(
