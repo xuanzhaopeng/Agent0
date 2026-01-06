@@ -10,4 +10,4 @@ def call_hello(name='abc.json', host='0.0.0.0', port=5000, timeout=60):
         return {'error': str(e), 'status_code': getattr(resp, 'status_code', None) if 'resp' in locals() else None}
 
 if __name__ == '__main__':
-    print(call_hello('/workspace/curriculum/temp_results/temp_2_767699278265_95664.json'))
+    print(call_hello('/workspace/curriculum/temp_results/temp_2_1767699278265_95664.json'))
