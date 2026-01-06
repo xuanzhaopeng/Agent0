@@ -29,6 +29,8 @@ Empirically, Agent 0 substantially boosts reasoning capabilities on the Qwen3-8B
 # Download models to /workspace which is Persistent volume in Runpod
 huggingface-cli login
 huggingface-cli download Qwen/Qwen3-0.6B-Base --local-dir /workspace/models/Qwen/Qwen3-0.6B-Base --local-dir-use-symlinks False
+
+pip install nvitop
 ```
 
 ```bash
@@ -65,8 +67,14 @@ Here is a sample script for the sandbox setup. We deployed four sandbox services
 git clone https://github.com/xuanzhaopeng/SandboxFusion.git
 
 cd SandboxFusion
-poetry install
-make run-online
+bash scripts/build.sh
+```
+
+```bash
+# Start 4 sandboxes with python runtime
+
+cd Agent0/Agent0
+bash start_sandboxes.sh
 ```
 
 ### 3. Train the Curriculum Agent
@@ -86,8 +94,10 @@ Then use the script to train the curriculum agent. This step will be relatively 
 
 ```bash
 cd curriculum_train/
+conda activate curriculum
 
-export STORAGE_PATH=""
+export MULTIPLE_VLLM_SERVICE=0
+export STORAGE_PATH="/workspace/curriculum"
 export HUGGINGFACENAME=""
 export WANDB_API_KEY=""
 
@@ -97,8 +107,16 @@ mkdir -p \
   "$STORAGE_PATH/generated_question" \
   "$STORAGE_PATH/temp_results"
 
+# if we enable wandb
+wandb login
+
 # Initialize first iteration with base model
-bash scripts/curriculum_train.sh Qwen/Qwen3-4B-Base Qwen/Qwen3-4B-Base qwen3_4b_curriculum_v1
+bash scripts/1_prepare_verl.sh
+bash scripts/2_start_vllm_service.sh Qwen/Qwen3-0.6B-Base
+bash scripts/3_curriculum_train_1gpu.sh Qwen/Qwen3-0.6B-Base qwen3_0_6b_curriculum_v1
+
+bash scripts/2_start_vllm_service.sh Qwen/Qwen3-4B-Base
+bash scripts/3_curriculum_train_1gpu.sh Qwen/Qwen3-4B-Base qwen3_8b_curriculum_v1
 ```
 
 ### 4. Data Curation
@@ -121,19 +139,6 @@ echo 'start upload'
 LOCAL_DATA_PATH=$(python question_evaluate/upload.py --max_score 0.8 --min_score 0.3 --experiment_name ${experiment_name})
 echo "training data saved to: ${LOCAL_DATA_PATH}"
 ```
-
-### 5. Train the Executor Agent
-
-Lastly, we implement the ADPO algorithm in `executor_train/verl_tool/trainer/ppo/core_algos.py` and then update the executor agent with multi-turn RL based on [VeRL-Tool](https://github.com/TIGER-AI-Lab/verl-tool).
-
-```bash
-cd ../executor_train
-
-# if out of cuda memory during training, try lower the use_dynamic_bs=False
-bash examples/train/math_tir/train_qwen3_4b_adpo.sh
-```
-
-The checkpoints will be saved in `checkpoints/torl`. So you can manually select the checkpoint and train the next iterations.
 
 ## 🙏 Acknowledgements
 
