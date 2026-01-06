@@ -32,10 +32,10 @@ CUDA_VISIBLE_DEVICES=0 python3 -m verl.trainer.main \
     trainer.project_name=$project_name \
     trainer.max_steps=3 \
     trainer.save_freq=1 \
-    worker.rollout.gpu_memory_utilization=0.5 \
+    worker.rollout.gpu_memory_utilization=0.4 \
     worker.rollout.tensor_parallel_size=1 \
-    worker.actor.fsdp.enable_cpu_offload=false \
-    worker.ref.fsdp.enable_cpu_offload=false
+    worker.actor.fsdp.enable_cpu_offload=true \
+    worker.ref.fsdp.enable_cpu_offload=true
 
 
 sleep 5
