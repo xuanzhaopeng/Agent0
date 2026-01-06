@@ -8,6 +8,7 @@ N_SANDBOXES=3 # n - 1 desired sandboxes
 echo "Starting SandboxFusion servers..."
 
 cd $SANDBOX_DIR
+source /workspace/miniconda3/etc/profile.d/conda.sh
 conda activate sandbox
 poetry install
 
