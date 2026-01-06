@@ -28,7 +28,7 @@ CUDA_VISIBLE_DEVICES=0 python3 -m verl.trainer.main \
     trainer.project_name=$project_name \
     trainer.max_steps=6 \
     trainer.save_freq=1 \
-    worker.rollout.gpu_memory_utilization=0.8 \
+    worker.rollout.gpu_memory_utilization=0.5 \
     worker.rollout.tensor_parallel_size=1
 
 
