@@ -127,7 +127,7 @@ class vLLMRollout(BaseRollout):
     @torch.no_grad()
     def generate_sequences(self, prompts: DataProto) -> DataProto:
         if self.rank == 0:
-            print("[Rollout] Start generating sequences.")
+            print(f"[Rollout] Start generating sequences with {len(prompts)}.")
             # traceback.print_stack()
             # exit()
         # left-padded attention_mask
