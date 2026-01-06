@@ -74,6 +74,8 @@ def generate_temp_filename(prefix="temp", suffix=".json"):
     rand_part = random.randint(0, 99999)
     return f"{STORAGE_PATH}/temp_results/{prefix}_{timestamp}_{rand_part}{suffix}"
 def split_list(lst, n=4):
+    if n == 1:
+        return lst
     k, m = divmod(len(lst), n)
     return [lst[i*k + min(i, m):(i+1)*k + min(i+1, m)] for i in range(n)]
 
@@ -88,20 +90,25 @@ def fetch(index,i):
     return True
 
 def generate_results(data):
-    datas = split_list(data,4)
-    random_names = [generate_temp_filename(prefix=f"temp_{i}", suffix=".json") for i in range(4)]
-    for i in range(4):
+    MULTIPLE_VLLM_SERVICE = os.getenv("MULTIPLE_VLLM_SERVICE","0")
+    if MULTIPLE_VLLM_SERVICE!="1":
+        split = 1
+    else:
+        split = 4
+    datas = split_list(data,split)
+    random_names = [generate_temp_filename(prefix=f"temp_{i}", suffix=".json") for i in range(split)]
+    for i in range(split):
         with open(random_names[i],'w') as f:
             json.dump(datas[i],f,indent=4)
 
     final_results = []
-    with ThreadPoolExecutor(max_workers=4) as executor:
-        futures = [executor.submit(fetch, i,random_names[i]) for i in range(4)]
+    with ThreadPoolExecutor(max_workers=split) as executor:
+        futures = [executor.submit(fetch, i,random_names[i]) for i in range(split)]
 
         for future in tqdm(as_completed(futures), total=len(futures), desc="  - Servers processing"):
             future.result() # Simplified to just get the result
 
-    for i in tqdm(range(4), desc="  - Reading result files", leave=False):
+    for i in tqdm(range(split), desc="  - Reading result files", leave=False):
         with open(random_names[i].replace('.json','_results.json'),'r') as f:
             final_results.extend(json.load(f))
     # Do not delete temp files for debugging
