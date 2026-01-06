@@ -95,6 +95,8 @@ def generate_results(data):
         split = 1
     else:
         split = 4
+    print(f"Using {split} vLLM servers for reward computation.")
+
     datas = split_list(data,split)
     random_names = [generate_temp_filename(prefix=f"temp_{i}", suffix=".json") for i in range(split)]
     for i in range(split):
