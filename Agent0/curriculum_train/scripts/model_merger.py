@@ -179,7 +179,7 @@ if __name__ == "__main__":
     assert isinstance(model, PreTrainedModel)
     model.to_empty(device="cpu")
 
-    print(f"Saving model to {hf_path}...")
+    print(f"Saving model to {hf_path}")
     model.save_pretrained(hf_path, state_dict=state_dict)
     del state_dict, model
 
