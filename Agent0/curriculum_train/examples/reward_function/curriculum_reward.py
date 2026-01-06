@@ -28,6 +28,8 @@ from sklearn.cluster import AgglomerativeClustering
 import numpy as np
 
 STORAGE_PATH = os.getenv("STORAGE_PATH","")
+MULTIPLE_VLLM_SERVICE = os.getenv("MULTIPLE_VLLM_SERVICE","0")
+
 
 def _bleu_distance_matrix(sentences):
     n = len(sentences)
@@ -82,7 +84,6 @@ def split_list(lst, n=4):
 os.environ["NO_PROXY"] = "0.0.0.0,127.0.0.1"
 
 def fetch(index,i):
-    MULTIPLE_VLLM_SERVICE = os.getenv("MULTIPLE_VLLM_SERVICE","0")
     if MULTIPLE_VLLM_SERVICE!="1":
         response = requests.get(f"http://0.0.0.0:5000/hello?name={i}")
     else:
@@ -90,7 +91,6 @@ def fetch(index,i):
     return True
 
 def generate_results(data):
-    MULTIPLE_VLLM_SERVICE = os.getenv("MULTIPLE_VLLM_SERVICE","0")
     if MULTIPLE_VLLM_SERVICE!="1":
         split = 1
     else:
